@@ -1,0 +1,18 @@
+
+##¿Qué cambia respecto a tu versión original?
+
+    Thread-safe
+    Usamos DateTimeFormatter (inmutable) en lugar de SimpleDateFormat (no thread-safe).
+
+    Consistencia UTC
+    Tanto al serializar como deserializar fijamos la zona horaria a UTC.
+
+    Menos riesgo de errores
+    Evitamos sincronización sobre un SimpleDateFormat estático y aprovechamos la API moderna de Java 8.
+	
+TransactionPOJO pojo = objectMapper.readValue(jsonResponse, TransactionPOJO.class);
+
+
+{ "fechaTransaccion": "2025-06-08T13:45:30.123Z" }
+
+y obtendrás un Calendar ajustado a ese instante en UTC, listo para tu lógica de generación de ISO 20022.

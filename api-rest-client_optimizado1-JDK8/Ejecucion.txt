@@ -1,0 +1,29 @@
+// ❌ TU CÓDIGO ACTUAL (LENTO)
+for (int i = 0; i < 1000; i++) {
+    APIRestComponentClient<MiRespuesta> client = new APIRestComponentClient<>(); // Nueva conexión TCP
+    MiRespuesta response = client.invokeRestServices(url, objeto, false, MiRespuesta.class);
+    client.close(); // Cierra conexión TCP
+}
+// Resultado: 1000 conexiones TCP nuevas = MUY LENTO
+
+// ✅ CÓDIGO OPTIMIZADO (RÁPIDO)
+APIRestClient<MiRespuesta> client = new APIRestClient<>(); // Una sola instancia
+for (int i = 0; i < 1000; i++) {
+    MiRespuesta response = client.invokeRestServices(url, objeto, false, MiRespuesta.class); // Reutiliza conexión
+}
+APIRestManager.shutdown(); // Cierra al final
+// Resultado: Reutiliza conexiones TCP = MUY RÁPIDO
+
+
+
+// Crear cliente UNA sola vez
+APIRestComponentClient<MiRespuesta> client = new APIRestComponentClient<>();
+
+for (MiObjeto objeto : listaObjetos) {
+    // Reutilizar el mismo cliente - conexiones HTTP se reutilizan automáticamente
+    MiRespuesta response = client.invokeRestServices(url, objeto, false, MiRespuesta.class);
+    // Procesar respuesta
+}
+
+// Al final de tu aplicación (opcional - se hace automáticamente)
+// APIRestComponentClient.shutdown();
